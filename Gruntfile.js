@@ -29,9 +29,9 @@ module.exports = function( grunt ) {
             'jquery': 'empty:',
             'knockout': 'empty:',
             'text': '../lib/require/text',
-            'durandal': 'empty:',
-            'plugins': 'empty:',
-            'transitions': 'empty:'
+            'durandal': '../lib/durandal/js',
+            'plugins': '../lib/durandal/js/plugins',
+            'transitions': '../lib/durandal/js/transitions'
         }
     };
 
@@ -90,7 +90,7 @@ module.exports = function( grunt ) {
             },
             durandal: {
                 main: {
-                    src: ['app/**/*.*'],
+                    src: ['app/**/*.*', 'lib/durandal/**/*.js'],
                         options: {
                         name: 'rAlias',
                         baseUrl: AlmondRequireConfig.baseUrl,
