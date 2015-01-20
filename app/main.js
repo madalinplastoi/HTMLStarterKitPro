@@ -6,7 +6,7 @@ rAlias.config({
         'plugins' : '../lib/durandal/js/plugins',
         'transitions' : '../lib/durandal/js/transitions',
         'knockout': '../lib/knockout/knockout-2.3.0',
-        'bootstrap': '../lib/bootstrap/js/bootstrap',
+        'bootstrap': '../lib/bootstrap/js/bootstrap.min',
         'bootstrap-select': '../lib/bootstrap/js/select2.min',
         'jquery': '../lib/jquery/jquery-1.9.1'
     },
@@ -54,7 +54,7 @@ define(['durandal/system', 'durandal/app', 'durandal/viewLocator'],  function (s
 
     app.start().then(function () {
 
-        require(['bootstrap-select','custom-bindings'], function (a,b) {
+        require(['bootstrap','bootstrap-select','custom-bindings'], function (a,b,c) {
 
             debugger;
             //Replace 'viewmodels' in the moduleId with 'views' to locate the view.
