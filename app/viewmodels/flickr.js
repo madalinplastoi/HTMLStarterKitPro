@@ -7,6 +7,9 @@
     return {
         displayName: 'Flickr',
         images: ko.observableArray([]),
+        Currencies: [{id: 1, name: "USD"}, {id: 2, name: "GBP"}],
+        SelectedCurrencyId: ko.observable(0),
+
         activate: function () {
             //the router's activator calls this function and waits for it to complete before proceding
             if (this.images().length > 0) {
@@ -14,11 +17,19 @@
             }
 
             var that = this;
-            return http.jsonp('http://api.flickr.com/services/feeds/photos_public.gne', { tags: 'mount ranier', tagmode: 'any', format: 'json' }, 'jsoncallback').then(function(response) {
+            return http.jsonp('http://api.flickr.com/services/feeds/photos_public.gne', {
+                tags: 'mount ranier',
+                tagmode: 'any',
+                format: 'json'
+            }, 'jsoncallback').then(function (response) {
                 that.images(response.items);
             });
         },
-        select: function(item) {
+        attached: function(){
+            debugger;
+            $('#currency-select').select2();
+        },
+        select: function (item) {
             //the app model allows easy display of modal dialogs by passing a view model
             //views are usually located by convention, but you an specify it as well with viewUrl
             item.viewUrl = 'views/detail';

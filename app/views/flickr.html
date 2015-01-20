@@ -1,4 +1,6 @@
 ﻿<section>
+    <span>Choose Currency:</span>
+    <select id="currency-select" class=" select2-drop-mask" style="width:150px !important;" data-bind="options: Currencies, optionsText: 'name', optionsValue: 'id', value: SelectedCurrencyId, optionsCaption: 'Choose Currency'" required></select>
     <h2 data-bind="html: displayName"></h2>
     <div class="row-fluid">
         <ul class="thumbnails" data-bind="foreach: images">

@@ -15,11 +15,23 @@ module.exports = function( grunt ) {
         baseUrl: 'app/',
         paths: {
             'jquery': '../lib/jquery/jquery-1.9.1',
-            'knockout': '../lib/knockout/knockout-2.3.0.debug',
+            'knockout': '../lib/knockout/knockout-2.3.0',
             'text': '../lib/require/text',
             'durandal': '../lib/durandal/js',
             'plugins': '../lib/durandal/js/plugins',
             'transitions': '../lib/durandal/js/transitions'
+        }
+    };
+
+    var AlmondRequireConfig = {
+        baseUrl: 'app/',
+        paths: {
+            'jquery': 'empty:',
+            'knockout': 'empty:',
+            'text': '../lib/require/text',
+            'durandal': 'empty:',
+            'plugins': 'empty:',
+            'transitions': 'empty:'
         }
     };
 
@@ -58,6 +70,14 @@ module.exports = function( grunt ) {
                 css: {
                     src: 'css/**',
                     dest: 'build/'
+                },
+                images: {
+                    src: 'Images/**',
+                    dest: 'build/'
+                },
+                requireConfig: {
+                    src: 'external-require.js',
+                    dest: 'build/app/'
                 }
             },
             open: {
@@ -70,12 +90,12 @@ module.exports = function( grunt ) {
             },
             durandal: {
                 main: {
-                    src: ['app/**/*.*', 'lib/durandal/**/*.js'],
-                    options: {
-                        name: '../lib/require/almond-custom',
-                        baseUrl: requireConfig.baseUrl,
+                    src: ['app/**/*.*'],
+                        options: {
+                        name: 'rAlias',
+                        baseUrl: AlmondRequireConfig.baseUrl,
                         mainPath: 'app/main',
-                        paths: mixIn({}, requireConfig.paths, { 'almond': '../lib/require/almond-custom.js' }),
+                        paths: mixIn({}, AlmondRequireConfig.paths, { 'rAlias': '../lib/require/require' }),
                         exclude: [],
                         optimize: 'none',
                         out: 'build/app/main.js'
@@ -108,6 +128,7 @@ module.exports = function( grunt ) {
             jshint: {
                 all: ['Gruntfile.js', 'app/**/*.js', 'test/specs/**/*.js']
             },
+
             uglify: {
                 options: {
                     banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> \n' +
@@ -150,6 +171,6 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks('grunt-durandal');
 
     grunt.registerTask('default', ['jshint', 'jasmine:dev', 'connect:dev:livereload', 'open:dev', 'watch:dev']);
-    grunt.registerTask('build', ['jshint', 'jasmine:dev', 'clean', 'copy', 'durandal:main', 'uglify', 'jasmine:build', 'connect:build', 'open:build', 'watch:build']);
+    grunt.registerTask('build', ['clean', 'copy', 'durandal:main', 'uglify', 'connect:build', 'open:build', 'watch:build']);
 
 };
