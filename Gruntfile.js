@@ -23,23 +23,25 @@ module.exports = function( grunt ) {
         }
     };
 
-    var AlmondRequireConfig = {
+    var noDurandalConfig = {
         baseUrl: 'app/',
         paths: {
             'jquery': 'empty:',
             'knockout': 'empty:',
             'text': '../lib/require/text',
-            'durandal': '../lib/durandal/js',
-            'plugins': '../lib/durandal/js/plugins',
-            'transitions': '../lib/durandal/js/transitions'
+            'durandal': 'empty:',
+            'plugins': 'empty:',
+            'transitions': 'empty:'
         }
     };
 
     grunt.initConfig({
             pkg: grunt.file.readJSON('package.json'),
+
             clean: {
                 build: ['build/*']
             },
+
             connect: {
                 build: {
                     options: {
@@ -58,6 +60,7 @@ module.exports = function( grunt ) {
                     }
                 }
             },
+
             copy: {
                 lib: {
                     src: 'lib/**/**',
@@ -75,33 +78,38 @@ module.exports = function( grunt ) {
                     src: 'Images/**',
                     dest: 'build/'
                 },
-                requireConfig: {
-                    src: 'external-require.js',
-                    dest: 'build/app/'
+                config: {
+                    src: 'app/config.js',
+                    dest: 'build/'
                 }
             },
+
             open: {
                 dev: {
                     path: 'http://localhost:<%= connect.dev.options.port %>/_SpecRunner.html'
                 },
                 build: {
                     path: 'http://localhost:<%= connect.build.options.port %>'
+                },
+                debug: {
+                    path: 'http://localhost:<%= connect.dev.options.port %>/index.html'
                 }
             },
+
             durandal: {
                 main: {
-                    src: ['app/**/*.*', 'lib/durandal/**/*.js'],
-                        options: {
+                    src: ['app/**/*.*','!app/config.js'],
+                    options: {
                         name: 'rAlias',
-                        baseUrl: AlmondRequireConfig.baseUrl,
+                        baseUrl: noDurandalConfig.baseUrl,
                         mainPath: 'app/main',
-                        paths: mixIn({}, AlmondRequireConfig.paths, { 'rAlias': '../lib/require/require' }),
-                        exclude: [],
-                        optimize: 'none',
+                        paths: mixIn({}, noDurandalConfig.paths, {'rAlias': '../wrapStart'}),
+                        exclude: ['text'],
                         out: 'build/app/main.js'
                     }
                 }
             },
+
             jasmine: {
                 dev: {
                     src: 'app/viewmodels/*.js',
@@ -125,6 +133,7 @@ module.exports = function( grunt ) {
                     }
                 }
             },
+
             jshint: {
                 all: ['Gruntfile.js', 'app/**/*.js', 'test/specs/**/*.js']
             },
@@ -154,6 +163,9 @@ module.exports = function( grunt ) {
                     options: {
                         livereload: true
                     }
+                },
+                debug: {
+                    files: ['app/**/*.js']
                 }
             }
         }
@@ -171,6 +183,11 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks('grunt-durandal');
 
     grunt.registerTask('default', ['jshint', 'jasmine:dev', 'connect:dev:livereload', 'open:dev', 'watch:dev']);
+
+    grunt.registerTask('debug', ['connect:dev:livereload', 'open:debug','watch:debug']);
+
     grunt.registerTask('build', ['clean', 'copy', 'durandal:main', 'uglify', 'connect:build', 'open:build', 'watch:build']);
+
+    grunt.registerTask('clear', ['clean']);
 
 };

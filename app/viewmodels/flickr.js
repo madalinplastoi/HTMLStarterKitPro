@@ -26,7 +26,6 @@
             });
         },
         attached: function(){
-            debugger;
             $('#currency-select').select2();
         },
         select: function (item) {
